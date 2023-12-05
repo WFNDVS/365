@@ -1,0 +1,25 @@
+import time
+
+def traffic_light():
+    while True:
+        print("Green light on!")
+        time.sleep(5)
+        print("Yellow light on!")
+        time.sleep(2)
+        print("Red light on!")
+        time.sleep(5)
+
+def pedestrian_signal():
+    while True:
+        print("Walk signal on!")
+        time.sleep(10)
+        print("Don't walk signal on!")
+        time.sleep(3)
+
+# 在交通灯和人行横道信号灯之间进行切换
+def toggle_signal():
+    while True:
+        traffic_light()
+        pedestrian_signal()
+
+toggle_signal()
