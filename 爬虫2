@@ -1,0 +1,34 @@
+import requests
+from bs4 import BeautifulSoup
+
+# 示例函数：获取网页内容
+def get_content(url):
+    try:
+        # 发送HTTP请求，获取页面内容
+        response = requests.get(url)
+        return response.text
+    except:
+        print(f"Error: failed to fetch url {url}")
+        return None
+
+# 示例函数：提取页面中所有标题的文本内容
+def get_titles(content):
+    try:
+        # 使用BeautifulSoup解析页面内容
+        soup = BeautifulSoup(content, "html.parser")
+
+        # 提取需要的信息
+        # 以下代码示例将提取页面中所有标题的文本内容
+        titles = soup.find_all("h2")  # 根据标签名查找所有符合条件的元素
+        return [title.text for title in titles]
+    except:
+        print("Error: failed to parse content")
+        return []
+
+# 示例用法
+url = "https://example.com"  # 替换为你要爬取的网页地址
+content = get_content(url)
+if content:
+    titles = get_titles(content)
+    for title in titles:
+        print(title)
