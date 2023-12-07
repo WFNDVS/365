@@ -1,0 +1,54 @@
+import requests
+from bs4 import BeautifulSoup
+import time
+import csv
+
+# 示例函数：获取网页内容
+def get_content(url):
+    try:
+        # 发送HTTP请求，获取页面内容
+        response = requests.get(url)
+        return response.text
+    except:
+        print(f"Error: failed to fetch url {url}")
+        return None
+
+# 示例函数：提取页面中所有标题的文本内容
+def get_titles(content):
+    try:
+        # 使用BeautifulSoup解析页面内容
+        soup = BeautifulSoup(content, "html.parser")
+
+        # 提取需要的信息
+        # 以下代码示例将提取页面中所有标题的文本内容
+        titles = soup.find_all("h2")  # 根据标签名查找所有符合条件的元素
+        return [title.text.strip() for title in titles]
+    except:
+        print("Error: failed to parse content")
+        return []
+
+# 示例函数：保存数据到CSV文件
+def save_to_csv(data, filename):
+    try:
+        with open(filename, "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["Title"])
+            for title in data:
+                writer.writerow([title])
+        print(f"Data saved to {filename}")
+    except:
+        print(f"Error: failed to save data to {filename}")
+
+# 示例用法
+base_url = "https://example.com/page/"  # 替换为你要爬取的网页基地址
+total_pages = 5  # 替换为你要爬取的总页数
+titles = []
+
+for page in range(1, total_pages + 1):
+    url = base_url + str(page)
+    content = get_content(url)
+    if content:
+        titles.extend(get_titles(content))
+        time.sleep(1)  # 增加延迟，避免给目标网站造成过大的负担
+
+save_to_csv(titles, "titles.csv")
