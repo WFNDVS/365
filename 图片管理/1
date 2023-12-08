@@ -1,0 +1,63 @@
+import os
+from PIL import Image
+from flask import Flask, request, send_file, jsonify
+
+app = Flask(__name__)
+
+# 设置图片存储目录
+UPLOAD_FOLDER = 'images'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# 检查存储目录是否存在，若不存在则创建
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+# 图片上传接口
+@app.route('/upload', methods=['POST'])
+def upload():
+    # 获取上传的图片文件
+    file = request.files['file']
+
+    # 获取文件名并保存图片
+    filename = file.filename
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    return jsonify({'message': '图片上传成功'})
+
+# 图片下载接口
+@app.route('/download/<filename>', methods=['GET'])
+def download(filename):
+    # 构建图片路径
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    # 检查文件是否存在
+    if os.path.exists(filepath):
+        return send_file(filepath, as_attachment=True)
+    else:
+        return jsonify({'error': '文件不存在'})
+
+# 图片删除接口
+@app.route('/delete/<filename>', methods=['DELETE'])
+def delete(filename):
+    # 构建图片路径
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    # 检查文件是否存在
+    if os.path.exists(filepath):
+        # 删除文件
+        os.remove(filepath)
+        return jsonify({'message': '图片删除成功'})
+    else:
+        return jsonify({'error': '文件不存在'})
+
+# 列出所有图片接口
+@app.route('/list', methods=['GET'])
+def list_images():
+    # 获取存储目录下所有文件
+    files = os.listdir(app.config['UPLOAD_FOLDER'])
+
+    # 返回文件列表
+    return jsonify({'files': files})
+
+if __name__ == '__main__':
+    app.run()
