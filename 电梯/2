@@ -1,0 +1,58 @@
+class Elevator:
+    def __init__(self, num_floors):
+        self.num_floors = num_floors
+        self.current_floor = 1
+        self.direction = "up"
+        self.destination_floors = []
+        self.stops = [False] * (self.num_floors + 1)
+
+    def request_floor(self, floor):
+        if floor == self.current_floor:
+            print(f"You are already on floor {floor}.")
+        elif floor < 1 or floor > self.num_floors:
+            print("Invalid floor request.")
+        else:
+            self.destination_floors.append(floor)
+            self.stops[floor] = True
+            if self.direction == "up" and floor < self.current_floor:
+                self.direction = "down"
+            elif self.direction == "down" and floor > self.current_floor:
+                self.direction = "up"
+            self.destination_floors.sort()
+            print(f"Floor {floor} requested.")
+
+    def move(self):
+        if not self.destination_floors:
+            print("No pending floor request.")
+            return
+        while True:
+            if self.current_floor in self.destination_floors:
+                self.destination_floors.remove(self.current_floor)
+                self.stops[self.current_floor] = False
+                print(f"Reached floor {self.current_floor}.")
+            if self.check_next_stop():
+                print(f"Moving {self.direction}... Current floor: {self.current_floor}")
+                if self.direction == "up":
+                    self.current_floor += 1
+                else:
+                    self.current_floor -= 1
+            else:
+                break
+
+    def check_next_stop(self):
+        if self.direction == "up":
+            for floor in range(self.current_floor + 1, self.num_floors + 1):
+                if self.stops[floor]:
+                    return True
+        else:
+            for floor in range(self.current_floor - 1, 0, -1):
+                if self.stops[floor]:
+                    return True
+        return False
+
+
+elevator = Elevator(20)
+elevator.request_floor(5)
+elevator.request_floor(10)
+elevator.request_floor(17)
+elevator.move()
