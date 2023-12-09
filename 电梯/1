@@ -1,0 +1,43 @@
+class Elevator:
+    def __init__(self, num_floors):
+        self.num_floors = num_floors
+        self.current_floor = 1
+        self.direction = "up"
+        self.destination_floors = []
+
+    def request_floor(self, floor):
+        if floor == self.current_floor:
+            print(f"You are already on floor {floor}.")
+        elif floor < 1 or floor > self.num_floors:
+            print("Invalid floor request.")
+        else:
+            self.destination_floors.append(floor)
+            if self.direction == "up" and floor < self.current_floor:
+                self.direction = "down"
+            elif self.direction == "down" and floor > self.current_floor:
+                self.direction = "up"
+            self.destination_floors.sort()
+            print(f"Floor {floor} requested.")
+
+    def move(self):
+        if not self.destination_floors:
+            print("No pending floor request.")
+            return
+        if self.direction == "up":
+            self.current_floor += 1
+        else:
+            self.current_floor -= 1
+        print(f"Moving {self.direction}... Current floor: {self.current_floor}")
+        if self.current_floor in self.destination_floors:
+            self.destination_floors.remove(self.current_floor)
+            print(f"Reached floor {self.current_floor}.")
+        if not self.destination_floors:
+            print("All floor requests completed.")
+        else:
+            self.move()
+
+elevator = Elevator(20)
+elevator.request_floor(5)
+elevator.request_floor(10)
+elevator.request_floor(17)
+elevator.move()
