@@ -1,0 +1,77 @@
+class Elevator:
+    def __init__(self, num_floors):
+        self.num_floors = num_floors
+        self.current_floor = 1
+        self.direction = "up"
+        self.destination_floors = []
+        self.floor_buttons = [False] * (self.num_floors + 1)
+        self.floor_indicators = ["-"] * (self.num_floors + 1)
+        self.is_moving = False
+
+    def request_floor(self, floor):
+        if floor == self.current_floor:
+            print(f"You are already on floor {floor}.")
+        elif floor < 1 or floor > self.num_floors:
+            print("Invalid floor request.")
+        elif self.floor_buttons[floor]:
+            print(f"Floor {floor} has already been requested.")
+        else:
+            self.destination_floors.append(floor)
+            self.floor_buttons[floor] = True
+            if self.direction == "up" and floor < self.current_floor:
+                self.direction = "down"
+            elif self.direction == "down" and floor > self.current_floor:
+                self.direction = "up"
+            self.destination_floors.sort()
+            print(f"Floor {floor} requested.")
+            self.show_floor_indicators()
+
+    def show_floor_indicators(self):
+        for floor in range(1, self.num_floors + 1):
+            indicator = "X" if self.floor_buttons[floor] else "-"
+            self.floor_indicators[floor] = indicator
+        print(f"{' '.join(map(str, self.floor_indicators))}")
+
+    def move(self):
+        if self.is_moving:
+            print("Elevator is already in motion.")
+            return
+        if not self.destination_floors:
+            print("No pending floor request.")
+            return
+        self.is_moving = True
+        while True:
+            if self.current_floor in self.destination_floors:
+                self.destination_floors.remove(self.current_floor)
+                self.floor_buttons[self.current_floor] = False
+                print(f"Reached floor {self.current_floor}.")
+                self.show_floor_indicators()
+            if self.check_next_stop():
+                print(f"Moving {self.direction}... Current floor: {self.current_floor}")
+                if self.direction == "up":
+                    self.current_floor += 1
+                else:
+                    self.current_floor -= 1
+            else:
+                break
+        self.is_moving = False
+
+    def check_next_stop(self):
+        if self.direction == "up":
+            for floor in range(self.current_floor + 1, self.num_floors + 1):
+                if self.floor_buttons[floor]:
+                    return True
+        else:
+            for floor in range(self.current_floor - 1, 0, -1):
+                if self.floor_buttons[floor]:
+                    return True
+        return False
+
+
+elevator = Elevator(20)
+elevator.request_floor(5)
+elevator.request_floor(10)
+elevator.request_floor(17)
+elevator.request_floor(10)
+elevator.move()
+elevator.move()
