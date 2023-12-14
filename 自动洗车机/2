@@ -1,0 +1,40 @@
+class Car:
+    def __init__(self, brand, color):
+        self.brand = brand
+        self.color = color
+
+    def __str__(self):
+        return f"{self.color} {self.brand}"
+
+
+class CarWashMachine:
+    def __init__(self, water_level):
+        self.water_level = water_level
+
+    def start(self, car):
+        if self.water_level <= 0:
+            print("水箱水量不足，请先添加水")
+        else:
+            print(f"开始洗车: {car}")
+            self.water_level -= 10
+
+    def add_water(self, amount):
+        self.water_level += amount
+        print(f"成功添加{amount}单位的水量，当前水箱水量为{self.water_level}")
+
+
+# 创建洗车机对象
+car_wash_machine = CarWashMachine(100)
+
+# 创建车辆对象
+car1 = Car("BMW", "黑色")
+car2 = Car("Audi", "红色")
+
+# 启动洗车机洗车
+car_wash_machine.start(car1)  # 输出: "开始洗车: 黑色 BMW"
+
+# 添加水
+car_wash_machine.add_water(50)  # 输出: "成功添加50单位的水量，当前水箱水量为150"
+
+# 启动洗车机再次洗车
+car_wash_machine.start(car2)  # 输出: "开始洗车: 红色 Audi"
