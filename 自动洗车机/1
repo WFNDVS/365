@@ -1,0 +1,25 @@
+class CarWashMachine:
+    def __init__(self):
+        self.water_level = 100  # 水箱水量初始值为100
+    
+    def start(self):
+        if self.water_level <= 0:
+            print("水箱水量不足，请先添加水")
+        else:
+            print("洗车开始")
+            self.water_level -= 10  # 每次洗车消耗10单位的水量
+            
+    def add_water(self, amount):
+        self.water_level += amount
+        print(f"成功添加{amount}单位的水量，当前水箱水量为{self.water_level}")
+        # 创建洗车机对象
+car_wash_machine = CarWashMachine()
+
+# 启动洗车机
+car_wash_machine.start()  # 输出: "洗车开始"
+
+# 添加水
+car_wash_machine.add_water(50)  # 输出: "成功添加50单位的水量，当前水箱水量为150"
+
+# 再次启动洗车机
+car_wash_machine.start()  # 输出: "洗车开始"
