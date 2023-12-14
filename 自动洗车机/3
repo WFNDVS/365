@@ -1,0 +1,198 @@
+import os
+from PIL import Image, ImageEnhance, ImageFilter
+
+input_folder = '<输入文件夹路径>'
+output_folder = '<输出文件夹路径>'
+
+# 确保输出文件夹存在
+os.makedirs(output_folder, exist_ok=True)
+
+# 获取输入文件夹中的所有图片文件
+image_files = [filename for filename in os.listdir(input_folder) if filename.endswith(('.jpg', '.jpeg', '.png'))]
+
+# 遍历每张图片进行批量处理
+for image_file in image_files:
+    # 打开图片
+    image = Image.open(os.path.join(input_folder, image_file))
+
+    # 缩放图片
+    def resize_image(image, new_size):
+        return image.resize(new_size)
+
+    new_size = (800, 600)
+    resized_image = resize_image(image, new_size)
+
+    # 调整亮度
+    def adjust_brightness(image, factor):
+        enhancer = ImageEnhance.Brightness(image)
+        return enhancer.enhance(factor)
+
+    brightness_factor = 1.2
+    brightened_image = adjust_brightness(image, brightness_factor)
+
+    # 应用滤镜
+    def apply_filter(image, filter_type):
+        if filter_type == 'blur':
+            return image.filter(ImageFilter.BLUR)
+        elif filter_type == 'contour':
+            return image.filter(ImageFilter.CONTOUR)
+        elif filter_type == 'sharpen':
+            return image.filter(ImageFilter.SHARPEN)
+        else:
+            return image
+
+    filtered_image = apply_filter(image, 'blur')
+
+    # 保存处理后的图片到输出文件夹
+    resized_image.save(os.path.join(output_folder, f'resized_{image_file}'))
+    brightened_image.save(os.path.join(output_folder, f'brightened_{image_file}'))
+    filtered_image.save(os.path.join(output_folder, f'filtered_{image_file}'))
+    import os
+from PIL import Image, ImageEnhance, ImageFilter
+import pytesseract
+import cv2
+import numpy as np
+
+input_folder = '<输入文件夹路径>'
+output_folder = '<输出文件夹路径>'
+
+# 确保输出文件夹存在
+os.makedirs(output_folder, exist_ok=True)
+
+# 获取输入文件夹中的所有文件
+file_list = os.listdir(input_folder)
+
+# 声明图像处理函数
+def process_image(image):
+    # 图像处理代码1
+    # ...
+
+    # 图像处理代码2
+    # ...
+
+    # 图像处理代码3
+    # ...
+
+    return image
+
+# 遍历每个文件进行批量处理
+for file_name in file_list:
+    # 获取文件全路径
+    file_path = os.path.join(input_folder, file_name)
+
+    # 判断文件类型
+    if file_name.endswith(('.jpg', '.jpeg', '.png')):
+        # 图像处理
+        image = Image.open(file_path)
+        processed_image = process_image(image)
+
+        # 保存处理后的图片到输出文件夹
+        output_file_path = os.path.join(output_folder, f'processed_{file_name}')
+        processed_image.save(output_file_path)
+
+    elif file_name.endswith('.txt'):
+        # 文本处理
+        with open(file_path, 'r') as file:
+            content = file.read()
+
+        # 文本处理代码1
+        # ...
+
+        # 文本处理代码2
+        # ...
+
+        # 文本处理代码3
+        # ...
+
+        # 保存处理后的文本到输出文件夹
+        output_file_path = os.path.join(output_folder, f'processed_{file_name}')
+        with open(output_file_path, 'w') as file:
+            file.write(processed_content)
+
+    elif file_name.endswith(('.mp4', '.avi')):
+        # 视频处理
+        cap = cv2.VideoCapture(file_path)
+
+        # 视频处理代码1
+        # ...
+
+        # 视频处理代码2
+        # ...
+
+        # 视频处理代码3
+        # ...
+
+        # 保存处理后的视频到输出文件夹
+        output_file_path = os.path.join(output_folder, f'processed_{file_name}')
+        out = cv2.VideoWriter(output_file_path, cv2.VideoWriter_fourcc(*'mp4v'), 30, (640, 480))
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                break
+            processed_frame = process_frame(frame)
+            out.write(processed_frame)
+        out.release()
+
+    elif file_name.endswith(('.pdf', '.docx')):
+        # 文档处理
+        # 文档处理代码1
+        # ...
+
+        # 文档处理代码2
+        # ...
+
+        # 文档处理代码3
+        # ...
+
+        # 保存处理后的文档到输出文件夹
+        output_file_path = os.path.join(output_folder, f'processed_{file_name}')
+        processed_document.save(output_file_path)
+
+    else:
+        # 其他文件类型处理
+        # ...
+
+        # 保存处理后的文件到输出文件夹
+        output_file_path = os.path.join(output_folder, f'processed_{file_name}')
+        processed_file.write(output_file_path)
+
+    print(f'{file_name} 处理完毕！')
+
+print('批量处理完成！')
+from PIL import Image, ImageEnhance, ImageFilter
+
+# 打开图片
+image = Image.open('input.jpg')
+
+# 缩放图片
+def resize_image(image, new_size):
+    return image.resize(new_size)
+
+new_size = (800, 600)
+resized_image = resize_image(image, new_size)
+
+# 调整亮度
+def adjust_brightness(image, factor):
+    enhancer = ImageEnhance.Brightness(image)
+    return enhancer.enhance(factor)
+
+brightness_factor = 1.2
+brightened_image = adjust_brightness(image, brightness_factor)
+
+# 应用滤镜
+def apply_filter(image, filter_type):
+    if filter_type == 'blur':
+        return image.filter(ImageFilter.BLUR)
+    elif filter_type == 'contour':
+        return image.filter(ImageFilter.CONTOUR)
+    elif filter_type == 'sharpen':
+        return image.filter(ImageFilter.SHARPEN)
+    else:
+        return image
+
+filtered_image = apply_filter(image, 'blur')
+
+# 保存图片
+resized_image.save('resized_image.jpg')
+brightened_image.save('brightened_image.jpg')
+filtered_image.save('filtered_image.jpg')
