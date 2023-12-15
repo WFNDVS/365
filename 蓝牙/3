@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/hci.h>
+#include <bluetooth/hci_lib.h>
+
+int main(int argc, char **argv)
+{
+    inquiry_info *devices = NULL;
+    int num = 0;
+    int length = 8;
+    int flags = IREQ_CACHE_FLUSH;
+
+    // 打开蓝牙设备
+    int dev_id = hci_get_route(NULL);
+    int sock = hci_open_dev(dev_id);
+    if (sock < 0) {
+        perror("Could not open Bluetooth device");
+        exit(1);
+    }
+
+    // 扫描附近的设备
+    devices = (inquiry_info*)malloc(length * sizeof(inquiry_info));
+    num = hci_inquiry(dev_id, length, num, NULL, &devices, flags);
+    if (num < 0) {
+        perror("Could not scan for devices");
+        exit(1);
+    }
+
+    // 显示扫描结果
+    for (int i = 0; i < num; i++) {
+        char addr[19] = {0};
+        ba2str(&(devices + i)->bdaddr, addr);
+        printf("设备地址: %s\n", addr);
+        printf("设备名称: %s\n", (devices + i)->name ? (devices + i)->name : "Unknown");
+    }
+
+    free(devices);
+    close(sock);
+    return 0;
+}
