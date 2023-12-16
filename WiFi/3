@@ -1,0 +1,30 @@
+// 注册扫描结果广播接收器
+BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(intent.getAction())) {
+            WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            List<ScanResult> scanResults = wifiManager.getScanResults();
+
+            for (ScanResult scanResult : scanResults) {
+                String ssid = scanResult.SSID;
+                int rssi = scanResult.level;
+                // 处理扫描到的每个 Wi-Fi 网络
+            }
+        }
+    }
+};
+
+// 注册广播接收器监听 Wi-Fi 扫描结果
+IntentFilter filter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+registerReceiver(wifiScanReceiver, filter);
+
+// 开始扫描 Wi-Fi 网络
+wifiManager.startScan();
+// 断开当前 Wi-Fi 连接
+wifiManager.disconnect();
+// 忘记已保存的 Wi-Fi 网络
+WifiConfiguration wifiConfig = new WifiConfiguration();
+wifiConfig.SSID = String.format("\"%s\"", ssid);
+wifiManager.removeNetwork(wifiManager.addNetwork(wifiConfig));
+wifiManager.saveConfiguration();
