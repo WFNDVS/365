@@ -1,0 +1,34 @@
+// 检查 Wi-Fi 状态
+WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+boolean isWifiEnabled = wifiManager.isWifiEnabled();
+
+// 获取已连接的 Wi-Fi 信息
+WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+String ssid = wifiInfo.getSSID();
+int rssi = wifiInfo.getRssi();
+
+// 监听 Wi-Fi 状态变化
+BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {
+            int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+
+            switch (wifiState) {
+                case WifiManager.WIFI_STATE_ENABLED:
+                    // Wi-Fi 已打开
+                    break;
+                case WifiManager.WIFI_STATE_DISABLED:
+                    // Wi-Fi 已关闭
+                    break;
+                case WifiManager.WIFI_STATE_UNKNOWN:
+                    // Wi-Fi 状态未知
+                    break;
+            }
+        }
+    }
+};
+
+// 注册广播接收器监听 Wi-Fi 状态变化
+IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+registerReceiver(wifiStateReceiver, filter);
