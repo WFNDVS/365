@@ -1,0 +1,14 @@
+WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+wifiManager.setWifiEnabled(true);
+
+String ssid = "Your Wi-Fi SSID";
+String password = "Your Wi-Fi password";
+
+WifiConfiguration wifiConfig = new WifiConfiguration();
+wifiConfig.SSID = String.format("\"%s\"", ssid);
+wifiConfig.preSharedKey = String.format("\"%s\"", password);
+
+int netId = wifiManager.addNetwork(wifiConfig);
+wifiManager.disconnect();
+wifiManager.enableNetwork(netId, true);
+wifiManager.reconnect();
