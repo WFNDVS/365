@@ -1,0 +1,32 @@
+import time
+import concurrent.futures
+
+# 定义任务函数
+def task1():
+    print("执行任务1...")
+    time.sleep(1)
+    return "任务1完成"
+
+def task2():
+    print("执行任务2...")
+    time.sleep(1)
+    return "任务2完成"
+
+def task3():
+    print("执行任务3...")
+    time.sleep(1)
+    return "任务3完成"
+
+# 创建任务列表
+tasks = [task1, task2, task3]
+
+# 执行任务流水线
+def run_pipeline():
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = [executor.submit(task) for task in tasks]
+    
+    for future in concurrent.futures.as_completed(results):
+        result = future.result()
+        print(result)
+
+run_pipeline()
