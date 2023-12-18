@@ -1,0 +1,41 @@
+import time
+from rplidar import RPLidar
+
+PORT_NAME = '/dev/ttyUSB0'
+lidar = RPLidar(PORT_NAME)
+MAX_DISTANCE = 5000 # 设置最大测距距离
+SCAN_DURATION = 10 # 设置扫描持续时间
+
+info = lidar.get_info()
+print(info)
+
+health = lidar.get_health()
+print(health)
+
+try:
+    counter = 0
+    while counter < SCAN_DURATION:
+        counter += 1
+        lidar_data = []
+        print('Start scan')
+        for scan in lidar.iter_scans():
+            for (_, angle, distance) in scan:
+                if distance > MAX_DISTANCE:
+                    continue
+                lidar_data.append((angle, distance))
+            # 如果达到扫描持续时间，则跳出循环
+            if counter >= SCAN_DURATION:
+                break
+        
+        # 将数据储存在文件中或者进行其他进一步处理
+        for data in lidar_data:
+            print(data)
+
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print('Stoping...')
+
+lidar.stop()
+lidar.stop_motor()
+lidar.disconnect()
