@@ -1,0 +1,48 @@
+// 引入红外测距库
+#include <Wire.h>
+#include <Adafruit_VL53L0X.h>
+
+// 初始化红外测距模块
+Adafruit_VL53L0X tof = Adafruit_VL53L0X();
+
+void setup() {
+  // 初始化串口通信
+  Serial.begin(9600);
+
+  // 启动红外测距模块
+  if (!tof.begin()) {
+    Serial.println(F("Failed to boot VL53L0X"));
+    while(1);
+  }
+  
+  // 设置测距模式
+  tof.setMeasurementTimingBudget(200000); // 设置测量时长
+
+  // 检查传感器类型
+  if (tof.VL53L0X_FastestModel()) {
+    Serial.println(F("Fast VL53L0X model detected!"));
+  } else {
+    Serial.println(F("Standard VL53L0X model detected!"));
+  }
+}
+
+void loop() {
+  // 进行测距
+  VL53L0X_RangingMeasurementData_t measure;
+  tof.rangingTest(&measure, false);
+
+  // 输出测距结果
+  if (measure.RangeStatus != 4) { // 4表示测量成功
+    // 获取距离值（单位：mm）
+    int distance = measure.RangeMilliMeter;
+    // 输出距离值
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" mm");
+  } else {
+    Serial.println("Out of range");
+  }
+  
+  // 延迟一段时间后再进行下一次测距
+  delay(500);
+}
