@@ -1,0 +1,28 @@
+import random
+
+# 定义机器人的回答列表
+greetings = ['你好！', '哈喽！', '嗨！']
+questions = ['你有什么问题想问我吗？', '有什么我可以帮助你的吗？']
+goodbyes = ['再见！', '拜拜！', '下次再见！']
+unknown_response = ['抱歉，我不明白你的意思。', '我不确定如何回答这个问题。']
+
+# 机器人的主要逻辑
+def chat():
+    while True:
+        user_input = input("你：")
+        # 转换为小写方便后续比较
+        user_input = user_input.lower()
+        
+        if user_input in ['hi', 'hello', '嗨', '你好']:
+            print("机器人：" + random.choice(greetings))
+        elif user_input in ['bye', '再见']:
+            print("机器人：" + random.choice(goodbyes))
+            break
+        elif user_input.endswith('?'):
+            print("机器人：" + random.choice(questions))
+        else:
+            print("机器人：" + random.choice(unknown_response))
+
+# 启动智能机器人
+print("你好！我是智能机器人。")
+chat()
