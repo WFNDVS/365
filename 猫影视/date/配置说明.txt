@@ -1,0 +1,12 @@
+正常的配置地址：
+assets://js/config_open.json
+assets://2js/config_open.json
+ 
+特殊点的配置地址:  
+assets://3js/config_open.json
+
+
+
+从正常版转换到特殊版需要在地址输入新地址后，仅需在按一下手机回车键即可加载！！！
+
+玩偶食用你是需要在config_open.json文件中输入你自己的阿里token才可以追剧。
