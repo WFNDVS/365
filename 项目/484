@@ -1,0 +1,50 @@
+import os
+from PIL import Image, ImageEnhance, ImageFilter
+
+input_folder = '<输入文件夹路径>'
+output_folder = '<输出文件夹路径>'
+
+# 确保输出文件夹存在
+os.makedirs(output_folder, exist_ok=True)
+
+# 获取输入文件夹中的所有图片文件
+image_files = [filename for filename in os.listdir(input_folder) if filename.endswith(('.jpg', '.jpeg', '.png'))]
+
+# 遍历每张图片进行批量处理
+for image_file in image_files:
+    # 打开图片
+    image = Image.open(os.path.join(input_folder, image_file))
+
+    # 缩放图片
+    def resize_image(image, new_size):
+        return image.resize(new_size)
+
+    new_size = (800, 600)
+    resized_image = resize_image(image, new_size)
+
+    # 调整亮度
+    def adjust_brightness(image, factor):
+        enhancer = ImageEnhance.Brightness(image)
+        return enhancer.enhance(factor)
+
+    brightness_factor = 1.2
+    brightened_image = adjust_brightness(image, brightness_factor)
+
+    # 应用滤镜
+    def apply_filter(image, filter_type):
+        if filter_type == 'blur':
+            return image.filter(ImageFilter.BLUR)
+        elif filter_type == 'contour':
+            return image.filter(ImageFilter.CONTOUR)
+        elif filter_type == 'sharpen':
+            return image.filter(ImageFilter.SHARPEN)
+        else:
+            return image
+
+    filtered_image = apply_filter(image, 'blur')
+
+    # 保存处理后的图片到输出文件夹
+    resized_image.save(os.path.join(output_folder, f'resized_{image_file}'))
+    brightened_image.save(os.path.join(output_folder, f'brightened_{image_file}'))
+    filtered_image.save(os.path.join(output_folder, f'filtered_{image_file}'))
+    
